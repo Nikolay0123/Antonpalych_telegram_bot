@@ -1,0 +1,17 @@
+[
+  {
+    "id": "city_center",
+    "title_ru": "Обзорная экскурсия по Чехову",
+    "title_en": "City tour of Chekhov",
+    "title_zh": "契诃夫市区观光",
+    "duration_hours": 3
+  },
+  {
+    "id": "museum",
+    "title_ru": "Посещение музеев и театра",
+    "title_en": "Museums and theatre visit",
+    "title_zh": "博物馆和剧院之旅",
+    "duration_hours": 4
+  }
+]
+

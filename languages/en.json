@@ -1,0 +1,93 @@
+{
+  "registration": {
+    "welcome": "Welcome to Antonpalych Hotel! 🏨",
+    "ask_phone": "📱 Please send your phone number (press the button below)",
+    "ask_room": "🔑 Enter your room number:",
+    "phone_button": "📱 Send phone number",
+    "language_prompt": "🌐 Choose your language:",
+    "registration_complete": "✅ Registration completed! Now you can use hotel services."
+  },
+  "languages": {
+    "ru": "🇷🇺 Русский",
+    "en": "🇬🇧 English",
+    "zh": "🇨🇳 中文"
+  },
+  "main_menu": {
+    "breakfast": "🍳 Order breakfast",
+    "excursions": "🏛️ Excursions",
+    "guide": "🚶 City guide",
+    "booking": "🏨 Book a room (Bnovo)",
+    "support": "🆘 Support / Report a problem",
+    "linen": "🧺 Change towels/linen",
+    "ai_assistant": "🤖 Ask AI assistant"
+  },
+  "breakfast": {
+    "title": "🍳 Breakfast order",
+    "select_date": "📅 Choose a date:",
+    "select_time": "⏰ Choose delivery time:",
+    "select_dish": "🍽 Choose dishes:",
+    "quantity": "🔢 Enter number of portions:",
+    "confirm": "✅ Confirm order",
+    "order_sent": "✅ Your order has been accepted! Breakfast will be delivered at {time}.",
+    "invalid_quantity": "Please enter a number from 1 to 20."
+  },
+  "excursions": {
+    "title": "🏛️ Excursions",
+    "select_excursion": "Choose an excursion:",
+    "select_date": "📅 Choose a date:",
+    "select_time": "⏰ Choose time:",
+    "select_people": "Enter number of people:",
+    "confirm": "✅ Confirm booking",
+    "sent": "✅ Your excursion request has been sent. Our staff will contact you."
+  },
+  "guide": {
+    "title": "🚶 City guide",
+    "select_language": "Choose guide language:",
+    "select_duration": "Choose duration:",
+    "select_type": "Private or group tour?",
+    "ask_places": "Write preferred places or theme of the tour:",
+    "confirm": "✅ Send request",
+    "sent": "✅ Your guide request has been sent. The tour operator will contact you."
+  },
+  "booking": {
+    "title": "🏨 Room booking",
+    "open_bnovo": "Open Bnovo",
+    "description": "Use the button below to extend your stay or create a new booking."
+  },
+  "support": {
+    "title": "🆘 Report a problem",
+    "describe": "Describe the problem in detail:",
+    "urgency": "Select urgency:",
+    "urgent": "🔴 Urgent",
+    "normal": "🟡 Normal",
+    "low": "🟢 Not urgent",
+    "confirm": "✅ Send",
+    "sent": "✅ Your message has been sent to the staff. They will reply shortly."
+  },
+  "linen": {
+    "title": "🧺 Change towels/linen",
+    "type": "What needs to be changed?",
+    "towels": "Towels",
+    "bedding": "Bed linen",
+    "both": "Both",
+    "quantity": "🔢 Number of sets:",
+    "time": "⏰ Preferred time:",
+    "confirm": "✅ Confirm request",
+    "sent": "✅ Your request has been sent to the housekeeping."
+  },
+  "ai": {
+    "title": "🤖 Hotel AI assistant",
+    "ask": "Ask any question about the hotel:",
+    "thinking": "Thinking of an answer...",
+    "fallback": "I'm not sure about the answer. Please contact the reception for more information."
+  },
+  "rating": {
+    "ask": "Please rate the quality of the service from 1 to 5:",
+    "thanks": "Thank you for your rating!"
+  },
+  "errors": {
+    "registration_required": "Please complete registration first.",
+    "invalid_input": "Invalid input. Please try again."
+  }
+}
+

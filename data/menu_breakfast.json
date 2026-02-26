@@ -1,0 +1,24 @@
+[
+  {
+    "id": "omelette",
+    "name_ru": "Омлет с овощами",
+    "name_en": "Omelette with vegetables",
+    "name_zh": "蔬菜煎蛋卷",
+    "price": 350
+  },
+  {
+    "id": "pancakes",
+    "name_ru": "Блины с вареньем",
+    "name_en": "Pancakes with jam",
+    "name_zh": "果酱薄饼",
+    "price": 300
+  },
+  {
+    "id": "porridge",
+    "name_ru": "Овсяная каша",
+    "name_en": "Oatmeal porridge",
+    "name_zh": "燕麦粥",
+    "price": 250
+  }
+]
+

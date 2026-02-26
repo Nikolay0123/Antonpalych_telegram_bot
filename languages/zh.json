@@ -1,0 +1,93 @@
+{
+  "registration": {
+    "welcome": "欢迎来到“安东帕雷奇”酒店！🏨",
+    "ask_phone": "📱 请发送您的电话号码（点击下面的按钮）",
+    "ask_room": "🔑 请输入您的房间号：",
+    "phone_button": "📱 发送电话号码",
+    "language_prompt": "🌐 请选择语言：",
+    "registration_complete": "✅ 注册完成！现在您可以使用酒店服务。"
+  },
+  "languages": {
+    "ru": "🇷🇺 Русский",
+    "en": "🇬🇧 English",
+    "zh": "🇨🇳 中文"
+  },
+  "main_menu": {
+    "breakfast": "🍳 预订早餐",
+    "excursions": "🏛️ 观光游",
+    "guide": "🚶 城市向导",
+    "booking": "🏨 预订房间（Bnovo）",
+    "support": "🆘 技术支持 / 报告问题",
+    "linen": "🧺 更换毛巾/床单",
+    "ai_assistant": "🤖 向智能助手提问"
+  },
+  "breakfast": {
+    "title": "🍳 早餐预订",
+    "select_date": "📅 请选择日期：",
+    "select_time": "⏰ 请选择送餐时间：",
+    "select_dish": "🍽 请选择菜品：",
+    "quantity": "🔢 请输入份数：",
+    "confirm": "✅ 确认订单",
+    "order_sent": "✅ 您的订单已提交！早餐将于 {time} 送达。",
+    "invalid_quantity": "请输入 1 到 20 之间的数字。"
+  },
+  "excursions": {
+    "title": "🏛️ 观光游预订",
+    "select_excursion": "请选择观光项目：",
+    "select_date": "📅 请选择日期：",
+    "select_time": "⏰ 请选择时间：",
+    "select_people": "请输入人数：",
+    "confirm": "✅ 确认预订",
+    "sent": "✅ 您的观光预订已发送，工作人员会与您联系。"
+  },
+  "guide": {
+    "title": "🚶 城市向导",
+    "select_language": "请选择向导语言：",
+    "select_duration": "请选择时长：",
+    "select_type": "私人游还是团队游？",
+    "ask_places": "请输入您想参观的地方或主题：",
+    "confirm": "✅ 发送申请",
+    "sent": "✅ 您的向导申请已发送，旅行社会与您联系。"
+  },
+  "booking": {
+    "title": "🏨 房间预订",
+    "open_bnovo": "打开 Bnovo",
+    "description": "如需延长住宿或新预订，请点击下方按钮。"
+  },
+  "support": {
+    "title": "🆘 报告问题",
+    "describe": "请详细描述问题：",
+    "urgency": "请选择紧急程度：",
+    "urgent": "🔴 非常紧急",
+    "normal": "🟡 一般",
+    "low": "🟢 不紧急",
+    "confirm": "✅ 发送",
+    "sent": "✅ 您的信息已发送给工作人员，他们会尽快回复。"
+  },
+  "linen": {
+    "title": "🧺 更换毛巾/床单",
+    "type": "需要更换什么？",
+    "towels": "毛巾",
+    "bedding": "床上用品",
+    "both": "全部",
+    "quantity": "🔢 套数：",
+    "time": "⏰ 合适时间：",
+    "confirm": "✅ 确认申请",
+    "sent": "✅ 您的申请已发送给客房服务。"
+  },
+  "ai": {
+    "title": "🤖 酒店智能助手",
+    "ask": "请提出关于酒店的任何问题：",
+    "thinking": "正在思考答案……",
+    "fallback": "我不确定答案，请联系前台以获取准确信息。"
+  },
+  "rating": {
+    "ask": "请您对本次服务打分（1-5）：",
+    "thanks": "感谢您的评价！"
+  },
+  "errors": {
+    "registration_required": "请先完成注册。",
+    "invalid_input": "输入不正确，请重试。"
+  }
+}
+
