@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import List
+from typing import List, Set
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
@@ -15,7 +15,7 @@ from keyboards import (
     main_menu_keyboard,
     rating_keyboard,
 )
-from languages import t
+from languages import t, load_language
 from utils.notifications import notify_reception
 from utils.validators import validate_quantity
 
@@ -37,10 +37,21 @@ def load_menu() -> List[dict]:
         return json.load(f)
 
 
-@router.message()
+def _breakfast_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("breakfast")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+BREAKFAST_BUTTON_TEXTS = _breakfast_button_texts()
+
+
+@router.message(F.text.in_(BREAKFAST_BUTTON_TEXTS))
 async def breakfast_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text != t(lang, "main_menu.breakfast"):
-        return
     await state.set_state(BreakfastStates.selecting_date)
     await message.answer(
         t(lang, "breakfast.select_date"),

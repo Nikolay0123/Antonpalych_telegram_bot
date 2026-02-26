@@ -1,7 +1,7 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Set
 
 import requests
 from aiogram import F, Router
@@ -11,7 +11,7 @@ from aiogram.types import Message
 
 from config import settings
 from keyboards import main_menu_keyboard
-from languages import t
+from languages import t, load_language
 
 
 router = Router()
@@ -28,38 +28,66 @@ def load_hotel_info() -> Dict[str, Any]:
         return json.load(f)
 
 
+def _ai_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("ai_assistant")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+AI_BUTTON_TEXTS = _ai_button_texts()
+
+
 async def ask_gemini(question: str, lang: str) -> str:
+    """
+    Вопрос к ИИ через OpenRouter (чат-completions).
+    """
+    api_key = settings.openrouter_api_key
+    if not api_key:
+        return ""
+
     hotel_info = load_hotel_info()
     system_prompt = (
-        "You are a helpful hotel assistant for hotel 'Antonpalych'. "
-        "Answer in the user's language. Use only the hotel information provided. "
+        "You are a helpful hotel assistant for smart hotel 'Antonpalych'. "
+        "Answer concisely in the user's language. Use only the hotel information provided. "
         "If the question is not covered by the data, say that you are not sure and suggest contacting reception.\n\n"
         f"Hotel data:\n{json.dumps(hotel_info, ensure_ascii=False, indent=2)}"
     )
-    body = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": system_prompt},
-                    {"text": f"User language: {lang}"},
-                    {"text": f"User question: {question}"},
-                ]
-            }
-        ]
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {
+            "role": "user",
+            "content": f"User language: {lang}\nUser question: {question}",
+        },
+    ]
+
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "HTTP-Referer": "https://t.me/Antonpalych_bot",
+        "X-Title": "Antonpalych Hotel Bot",
     }
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-    params = {"key": settings.gemini_api_key}
+    payload = {
+        "model": settings.openrouter_model or "google/gemini-2.0-flash-001",
+        "messages": messages,
+    }
 
     def _request() -> str:
-        resp = requests.post(url, params=params, json=body, timeout=20)
+        resp = requests.post(url, headers=headers, json=payload, timeout=20)
         resp.raise_for_status()
         data = resp.json()
-        candidates = data.get("candidates") or []
-        if not candidates:
+        choices = data.get("choices") or []
+        if not choices:
             return ""
-        parts = candidates[0].get("content", {}).get("parts") or []
-        texts = [p.get("text", "") for p in parts if isinstance(p, dict)]
-        return "\n".join(texts).strip()
+        message = choices[0].get("message", {}) or {}
+        content = message.get("content") or ""
+        return str(content).strip()
 
     try:
         return await asyncio.to_thread(_request)
@@ -67,19 +95,18 @@ async def ask_gemini(question: str, lang: str) -> str:
         return ""
 
 
-@router.message()
-async def ai_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text == t(lang, "main_menu.ai_assistant"):
-        await state.set_state(AIStates.waiting_question)
-        await message.answer(t(lang, "ai.ask"))
-        return
+@router.message(F.text.in_(AI_BUTTON_TEXTS))
+async def ai_start(message: Message, state: FSMContext, lang: str) -> None:
+    await state.set_state(AIStates.waiting_question)
+    await message.answer(t(lang, "ai.ask"))
 
-    current_state = await state.get_state()
-    if current_state == AIStates.waiting_question.state:
-        await message.answer(t(lang, "ai.thinking"))
-        answer = await ask_gemini(message.text or "", lang)
-        if not answer:
-            answer = t(lang, "ai.fallback")
-        await message.answer(answer, reply_markup=main_menu_keyboard(lang))
-        await state.clear()
+
+@router.message(AIStates.waiting_question, F.text)
+async def ai_process_question(message: Message, state: FSMContext, lang: str) -> None:
+    await message.answer(t(lang, "ai.thinking"))
+    answer = await ask_gemini(message.text or "", lang)
+    if not answer:
+        answer = t(lang, "ai.fallback")
+    await message.answer(answer, reply_markup=main_menu_keyboard(lang))
+    await state.clear()
 

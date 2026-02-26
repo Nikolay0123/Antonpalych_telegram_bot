@@ -1,3 +1,5 @@
+from typing import Set
+
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -6,7 +8,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from database import get_user
 from keyboards import main_menu_keyboard
-from languages import t
+from languages import t, load_language
 from utils.notifications import notify_reception
 
 
@@ -77,10 +79,21 @@ def guide_type_keyboard() -> InlineKeyboardMarkup:
     )
 
 
-@router.message()
+def _guide_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("guide")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+GUIDE_BUTTON_TEXTS = _guide_button_texts()
+
+
+@router.message(F.text.in_(GUIDE_BUTTON_TEXTS))
 async def guide_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text != t(lang, "main_menu.guide"):
-        return
     await state.set_state(GuideStates.selecting_language)
     await message.answer(
         t(lang, "guide.select_language"),

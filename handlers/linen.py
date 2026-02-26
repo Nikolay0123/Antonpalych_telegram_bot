@@ -1,3 +1,5 @@
+from typing import Set
+
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -5,7 +7,7 @@ from aiogram.types import CallbackQuery, Message
 
 from database import add_linen_request, get_user, set_linen_rating
 from keyboards import linen_type_keyboard, main_menu_keyboard, rating_keyboard
-from languages import t
+from languages import t, load_language
 from utils.notifications import notify_reception
 from utils.validators import validate_quantity
 
@@ -19,10 +21,21 @@ class LinenStates(StatesGroup):
     entering_time = State()
 
 
-@router.message()
+def _linen_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("linen")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+LINEN_BUTTON_TEXTS = _linen_button_texts()
+
+
+@router.message(F.text.in_(LINEN_BUTTON_TEXTS))
 async def linen_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text != t(lang, "main_menu.linen"):
-        return
     await state.set_state(LinenStates.selecting_type)
     await message.answer(
         t(lang, "linen.type"),

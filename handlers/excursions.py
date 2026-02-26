@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Set
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
@@ -13,7 +14,7 @@ from keyboards import (
     time_inline_keyboard,
     main_menu_keyboard,
 )
-from languages import t
+from languages import t, load_language
 from utils.notifications import notify_reception
 from utils.validators import validate_quantity
 
@@ -35,10 +36,21 @@ def load_excursions():
         return json.load(f)
 
 
-@router.message()
+def _excursions_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("excursions")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+EXCURSIONS_BUTTON_TEXTS = _excursions_button_texts()
+
+
+@router.message(F.text.in_(EXCURSIONS_BUTTON_TEXTS))
 async def excursions_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text != t(lang, "main_menu.excursions"):
-        return
     await state.set_state(ExcursionStates.selecting_excursion)
     excursions = load_excursions()
     await message.answer(

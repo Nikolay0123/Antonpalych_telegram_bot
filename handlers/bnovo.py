@@ -1,4 +1,5 @@
 from urllib.parse import urlencode
+from typing import Set
 
 from aiogram import F, Router
 from aiogram.types import Message
@@ -6,16 +7,27 @@ from aiogram.types import Message
 from config import settings
 from database import get_user
 from keyboards import bnovo_keyboard
-from languages import t
+from languages import t, load_language
 
 
 router = Router()
 
 
-@router.message()
+def _booking_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("booking")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+BOOKING_BUTTON_TEXTS = _booking_button_texts()
+
+
+@router.message(F.text.in_(BOOKING_BUTTON_TEXTS))
 async def open_bnovo(message: Message, lang: str) -> None:
-    if message.text != t(lang, "main_menu.booking"):
-        return
     user = await get_user(message.from_user.id)
     base_url = settings.bnovo_base_url.rstrip("/")
     params = {}

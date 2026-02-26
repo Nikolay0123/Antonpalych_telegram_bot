@@ -1,3 +1,5 @@
+from typing import Set
+
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -5,7 +7,7 @@ from aiogram.types import CallbackQuery, Message
 
 from database import add_support_ticket, get_user, set_support_rating
 from keyboards import main_menu_keyboard, urgency_keyboard, rating_keyboard
-from languages import t
+from languages import t, load_language
 from utils.notifications import notify_reception
 
 
@@ -17,10 +19,21 @@ class SupportStates(StatesGroup):
     waiting_urgency = State()
 
 
-@router.message()
+def _support_button_texts() -> Set[str]:
+    texts: Set[str] = set()
+    for code in ("ru", "en", "zh"):
+        data = load_language(code)
+        text = data.get("main_menu", {}).get("support")
+        if isinstance(text, str):
+            texts.add(text)
+    return texts
+
+
+SUPPORT_BUTTON_TEXTS = _support_button_texts()
+
+
+@router.message(F.text.in_(SUPPORT_BUTTON_TEXTS))
 async def support_entry(message: Message, state: FSMContext, lang: str) -> None:
-    if message.text != t(lang, "main_menu.support"):
-        return
     await state.set_state(SupportStates.waiting_issue)
     await message.answer(t(lang, "support.describe"))
 
