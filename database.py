@@ -17,6 +17,8 @@ CREATE_QUERIES = [
         language TEXT DEFAULT 'ru',
         registered_at TIMESTAMP,
         last_active TIMESTAMP
+        consent_accepted INTEGER DEFAULT 0,          -- Флаг согласия с политикой
+        consent_timestamp TIMESTAMP
     );
     """,
     """
@@ -70,21 +72,39 @@ async def init_db() -> None:
 
 
 async def upsert_user(
-    user_id: int, phone: str, room_number: str, language: str
+    user_id: int, phone: str, room_number: str, language: str, consent_accepted: bool = False
 ) -> None:
     now = datetime.utcnow().isoformat()
+    consent_val = int(consent_accepted)
+    consent_time = now if consent_val else None
+
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
-            INSERT INTO users (user_id, phone, room_number, language, registered_at, last_active)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO users (
+                user_id, phone, room_number, language, 
+                registered_at, last_active, 
+                consent_accepted, consent_timestamp
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(user_id) DO UPDATE SET
                 phone = excluded.phone,
                 room_number = excluded.room_number,
                 language = excluded.language,
-                last_active = excluded.last_active;
+                last_active = excluded.last_active,
+                consent_accepted = COALESCE(excluded.consent_accepted, consent_accepted),
+                consent_timestamp = COALESCE(excluded.consent_timestamp, consent_timestamp);
             """,
-            (user_id, phone, room_number, language, now, now),
+            (
+                user_id,
+                phone,
+                room_number,
+                language,
+                now,
+                now,
+                consent_val,
+                consent_time,
+            ),
         )
         await db.commit()
 

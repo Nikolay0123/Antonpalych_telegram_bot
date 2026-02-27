@@ -83,6 +83,7 @@ async def process_language(callback: CallbackQuery, state: FSMContext) -> None:
         phone=phone,
         room_number=room,
         language=lang_code,
+        consent_accepted=True,  # ← вот это важно!
     )
     await state.clear()
     await callback.message.answer(
