@@ -5,7 +5,11 @@
     "ask_room": "🔑 Enter your room number:",
     "phone_button": "📱 Send phone number",
     "language_prompt": "🌐 Choose your language:",
-    "registration_complete": "✅ Registration completed! Now you can use hotel services."
+    "registration_complete": "✅ Registration completed! Now you can use hotel services.",
+    "policy_message": "To continue registration, you must accept the <a href=\"{link}\">Privacy Policy</a>. By clicking 'I Accept', you consent to the processing of your personal data."
+  },
+  "button": {
+    "accept_policy": "✅ I Accept"
   },
   "languages": {
     "ru": "🇷🇺 Русский",

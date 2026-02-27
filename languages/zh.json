@@ -5,7 +5,11 @@
     "ask_room": "🔑 请输入您的房间号：",
     "phone_button": "📱 发送电话号码",
     "language_prompt": "🌐 请选择语言：",
-    "registration_complete": "✅ 注册完成！现在您可以使用酒店服务。"
+    "registration_complete": "✅ 注册完成！现在您可以使用酒店服务。",
+    "policy_message": "继续注册前，您必须接受<a href=\"{link}\">隐私政策</a>。 点击“我接受”即表示您同意我们对您个人数据的处理。"
+  },
+  "button": {
+    "accept_policy": "✅ 我接受"
   },
   "languages": {
     "ru": "🇷🇺 Русский",

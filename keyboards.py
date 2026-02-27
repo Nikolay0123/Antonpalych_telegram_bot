@@ -185,4 +185,16 @@ def get_booking_button(lang: str) -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
+def accept_policy_keyboard(lang: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=t(lang, "button.accept_policy"),
+                    callback_data="accept_policy"
+                )
+            ]
+        ]
+    )
+
 
