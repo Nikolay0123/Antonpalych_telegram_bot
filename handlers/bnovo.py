@@ -6,38 +6,22 @@ from aiogram.types import Message
 
 from config import settings
 from database import get_user
-from keyboards import bnovo_keyboard
+from keyboards import get_booking_button
 from languages import t, load_language
 
 
 router = Router()
 
 
-def _booking_button_texts() -> Set[str]:
-    texts: Set[str] = set()
-    for code in ("ru", "en", "zh"):
-        data = load_language(code)
-        text = data.get("main_menu", {}).get("booking")
-        if isinstance(text, str):
-            texts.add(text)
-    return texts
-
-
-BOOKING_BUTTON_TEXTS = _booking_button_texts()
-
-
-@router.message(F.text.in_(BOOKING_BUTTON_TEXTS))
-async def open_bnovo(message: Message, lang: str) -> None:
-    user = await get_user(message.from_user.id)
-    base_url = settings.bnovo_base_url.rstrip("/")
-    params = {}
-    if user:
-        params["phone"] = user["phone"]
-        params["room"] = user["room_number"]
-    query = f"?{urlencode(params)}" if params else ""
-    url = f"{base_url}{query}"
+@router.message(F.text.contains("Забронировать") | F.text.contains("Booking") | F.text.contains("预订"))
+async def booking_handler(message: Message, lang: str):
+    """Обработчик нажатия на кнопку бронирования"""
     await message.answer(
-        t(lang, "booking.description"),
-        reply_markup=bnovo_keyboard(lang, url),
+        "🔗 Нажмите кнопку ниже, чтобы перейти на сайт бронирования:\n\n"
+        "💡 *Совет:* Сайт откроется прямо в Telegram, не закрывайте бота!",
+        reply_markup=get_booking_button(lang),
+        parse_mode="Markdown"
     )
+
+
 

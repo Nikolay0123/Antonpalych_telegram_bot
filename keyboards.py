@@ -5,8 +5,9 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     InlineKeyboardMarkup,
-    InlineKeyboardButton,
+    InlineKeyboardButton, WebAppInfo
 )
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from languages import t
 
@@ -167,15 +168,21 @@ def rating_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def bnovo_keyboard(lang: str, url: str) -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(
-                    text=t(lang, "booking.open_bnovo"),
-                    url=url,
-                )
-            ]
-        ]
+def get_booking_button(lang: str) -> InlineKeyboardMarkup:
+    """Кнопка бронирования с Web App (открывается внутри Telegram)"""
+    builder = InlineKeyboardBuilder()
+
+    # Ссылка на ваш сайт бронирования (замените на реальную)
+    # Например: https://my.bnovo.ru/hotel/12345 или ваш собственный сайт
+    booking_url = "https://ap-ch.ru/bronirovanie"
+
+    builder.row(
+        InlineKeyboardButton(
+            text=t(lang, "main_menu.booking"),  # Текст кнопки из языкового файла
+            web_app=WebAppInfo(url=booking_url)  # 👈 ВАЖНО: открывается внутри Telegram!
+        )
     )
+    return builder.as_markup()
+
+
 

@@ -144,7 +144,7 @@ async def set_breakfast_rating(order_id: int, rating: int) -> None:
 
 
 async def add_support_ticket(
-    user_id: int, issue: str, urgency: str
+    user_id: int, issue: str, urgency: str='normal'
 ) -> int:
     async with aiosqlite.connect(DB_PATH) as db:
         cursor = await db.execute(
